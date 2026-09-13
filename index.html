@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Portfolio</title>
+  <link rel="icon" type="image/png" href="logito.png">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "bg-primary": "#0a0c14",
+            "bg-card": "#111625",
+            "bg-secondary": "#151c2e",
+            "border-subtle": "rgba(255,255,255,0.08)",
+            "primary": "#818cf8",
+            "primary-container": "#1152f5",
+            "text-primary": "#f8fafc",
+            "text-muted": "#94a3b8"
+          },
+          fontFamily: {
+            "sans": ["Inter","sans-serif"],
+            "mono": ["JetBrains Mono","monospace"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ── Material Symbols ─────────────────────────────────────── */
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal; font-style: normal;
+      font-size: 20px; line-height: 1;
+      display: inline-block; white-space: nowrap;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Glassmorphism ────────────────────────────────────────── */
+    .carrd-glass {
+      background: linear-gradient(180deg, rgba(17,24,39,.75) 0%, rgba(11,15,25,.9) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SISTEMA DE ANIMACIONES SCROLL
+       ──────────────────────────────────────────────────────────
+       • Estado inicial: opacity 0 + translateY(18px)
+       • Clase .in-view añadida por IntersectionObserver:
+         activa la transición CSS (funciona en TODOS los browsers)
+       • El stagger se controla con la variable --delay en el HTML
+       • prefers-reduced-motion: se respeta automáticamente
+    ═══════════════════════════════════════════════════════════ */
+
+    /* Estado inicial — oculto hasta entrar en viewport */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      /* La transition se activa SOLO cuando se agrega .in-view */
+      transition:
+        opacity  0.55s ease-out var(--delay, 0ms),
+        transform 0.55s ease-out var(--delay, 0ms);
+      /* Forzar capa GPU para evitar repaints */
+      will-change: opacity, transform;
+    }
+
+    /* Estado visible — disparado por IntersectionObserver */
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Respetar prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="text-text-primary antialiased selection:bg-primary-container selection:text-white min-h-screen relative overflow-x-hidden font-sans">
+
+  <!-- Aviso sólo visible cuando se abre como archivo local file:/// -->
+  <div id="file-protocol-notice" class="hidden bg-indigo-950/90 border-b border-indigo-500/30 text-indigo-200 text-xs py-2 px-4 text-center font-mono relative z-50">
+    💡 <span class="text-white font-semibold">Tip para pruebas en PC:</span> Si abres el archivo directamente (<code class="text-indigo-300">file:///</code>), YouTube puede restringir la reproducción embebida (Error 153). Abre el sitio a través de tu servidor local: <a href="http://localhost:8080/Shiroth_portfolio.html" class="underline text-primary font-bold hover:text-white" target="_blank">http://localhost:8080/Shiroth_portfolio.html</a>
+  </div>
+
+  <!-- ── Fondo estático ──────────────────────────────────────── -->
+  <div class="fixed inset-0 pointer-events-none -z-20 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#3b60ff] via-[#4e55e8] to-[#252a78] opacity-95"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(120,80,255,0.7),transparent_70%)]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(247,195,146,0.35),transparent_55%)]"></div>
+    <div class="absolute inset-0 opacity-25"
+         style="background-image:linear-gradient(to right,rgba(255,255,255,.22) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.22) 1px,transparent 1px);background-size:80px 80px">
+    </div>
+    <svg class="absolute inset-0 w-full h-full opacity-35 stroke-white/40 pointer-events-none"
+         fill="none" preserveAspectRatio="none" viewBox="0 0 1440 900">
+      <line stroke-width="1.5" x1="720" x2="0"    y1="450" y2="0"/>
+      <line stroke-width="1.5" x1="720" x2="1440" y1="450" y2="0"/>
+      <line stroke-width="1.5" x1="720" x2="0"    y1="450" y2="900"/>
+      <line stroke-width="1.5" x1="720" x2="1440" y1="450" y2="900"/>
+      <line stroke-width="1"   x1="720" x2="360"  y1="450" y2="0"/>
+      <line stroke-width="1"   x1="720" x2="1080" y1="450" y2="0"/>
+      <line stroke-width="1"   x1="720" x2="360"  y1="450" y2="900"/>
+      <line stroke-width="1"   x1="720" x2="1080" y1="450" y2="900"/>
+      <rect height="140" stroke="rgba(255,255,255,.35)" stroke-width="1.2" width="240" x="600" y="380"/>
+      <rect height="300" stroke="rgba(255,255,255,.25)" stroke-width="1"   width="480" x="480" y="300"/>
+      <rect height="540" stroke="rgba(255,255,255,.18)" stroke-width=".8"  width="840" x="300" y="180"/>
+    </svg>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0d1024]/80 via-transparent to-transparent"></div>
+  </div>
+
+  <main class="max-w-6xl mx-auto px-6 sm:px-8 pt-12 pb-28 flex flex-col gap-20 md:gap-24">
+
+    <!-- ══════════════════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════════════════ -->
+    <section class="flex flex-col items-center text-center pt-4 sm:pt-8" id="hero">
+
+      <!-- Logo -->
+      <div class="relative mb-6 reveal" style="--delay:0ms">
+        <div class="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 opacity-60 blur-xl"></div>
+        <div class="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full p-1
+                    bg-gradient-to-b from-primary/50 via-primary-container/20 to-transparent
+                    border border-primary/40 shadow-[0_0_40px_rgba(17,82,245,0.45)]
+                    flex items-center justify-center">
+          <img alt="Shiroth Logo"
+               class="w-full h-full rounded-full object-cover shadow-inner"
+               src="logito.png">
+        </div>
+      </div>
+
+      <!-- Badge disponibilidad -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full
+                  bg-bg-card/90 border border-emerald-500/40 mb-3
+                  shadow-[0_0_15px_rgba(16,185,129,0.15)] reveal" style="--delay:80ms">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+        <span class="text-xs font-mono text-emerald-400 font-medium tracking-wide">DISPONIBLE PARA PROYECTOS</span>
+      </div>
+
+      <!-- Título -->
+      <h1 class="text-5xl sm:text-6xl font-black tracking-tight text-text-primary mt-2 reveal" style="--delay:160ms">
+        Shiroth
+      </h1>
+      <p class="text-sm sm:text-base font-mono tracking-widest text-primary font-semibold uppercase mt-3 reveal" style="--delay:240ms">
+        Motion Graphics &amp; Video Editing
+      </p>
+
+      <!-- Links de acción -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mt-8 reveal" style="--delay:320ms">
+        <a class="px-6 py-3.5 rounded-xl bg-bg-card border border-border-subtle
+                  hover:border-primary/50 text-text-primary font-mono text-sm sm:text-base
+                  hover:bg-bg-secondary flex items-center gap-2.5 transition-all"
+           href="https://x.com/shiroth_vfx" rel="noopener noreferrer" target="_blank">
+          <span class="font-bold text-lg">𝕏</span>
+          <span>@shiroth_vfx</span>
+        </a>
+        <a class="px-6 py-3.5 rounded-xl bg-primary-container text-white font-mono text-sm sm:text-base
+                  hover:bg-blue-600 shadow-[0_0_20px_rgba(17,82,245,0.4)] flex items-center gap-2.5 transition-all"
+           href="mailto:esquibelelias2@gmail.com">
+          <span class="material-symbols-outlined text-lg">mail</span>
+          <span>esquibelelias2@gmail.com</span>
+        </a>
+      </div>
+
+      <!-- Servicios -->
+      <div class="carrd-glass rounded-2xl border border-border-subtle p-8 mt-10
+                  w-full max-w-2xl text-left shadow-xl reveal" style="--delay:400ms">
+        <span class="text-xs sm:text-sm font-mono text-primary uppercase tracking-widest block mb-4 font-bold">
+          SERVICIOS ESENCIALES
+        </span>
+        <ul class="space-y-3.5 text-sm sm:text-base text-text-muted leading-relaxed">
+          <li class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+            <span>Edición de videos long-form y short-form</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+            <span>Diseño de miniaturas</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+            <span>Diseño y animación de Stream Overlays</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+            <span>Videolyrics cinemáticos</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         TOOLS
+    ═══════════════════════════════════════════════════ -->
+    <section class="flex flex-col gap-6" id="tools">
+
+      <div class="flex items-center justify-between border-b border-border-subtle pb-4 reveal" style="--delay:0ms">
+        <h2 class="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight">Tools</h2>
+      </div>
+
+      <div class="carrd-glass p-8 sm:p-10 rounded-2xl border border-white/20 shadow-xl
+                  flex flex-col sm:flex-row items-center justify-around gap-8 sm:gap-12">
+
+        <div class="flex flex-col items-center gap-3.5 reveal" style="--delay:80ms">
+          <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#162035] border-4 border-[#242e47]
+                      flex items-center justify-center text-[#26c6da] font-black text-3xl sm:text-4xl
+                      font-mono shadow-[0_0_25px_rgba(38,198,218,0.3)]">Ps</div>
+          <span class="text-sm sm:text-base font-mono font-semibold tracking-wider text-text-primary uppercase">Photoshop</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-3.5 reveal" style="--delay:180ms">
+          <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#181b3d] border-4 border-[#252857]
+                      flex items-center justify-center text-[#818cf8] font-black text-3xl sm:text-4xl
+                      font-mono shadow-[0_0_25px_rgba(129,140,248,0.3)]">Pr</div>
+          <span class="text-sm sm:text-base font-mono font-semibold tracking-wider text-text-primary uppercase">Premiere Pro</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-3.5 reveal" style="--delay:280ms">
+          <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#201838] border-4 border-[#352554]
+                      flex items-center justify-center text-[#c084fc] font-black text-3xl sm:text-4xl
+                      font-mono shadow-[0_0_25px_rgba(192,132,252,0.3)]">Ae</div>
+          <span class="text-sm sm:text-base font-mono font-semibold tracking-wider text-text-primary uppercase">After Effects</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SHOWCASE
+    ═══════════════════════════════════════════════════ -->
+    <section class="flex flex-col gap-10" id="work">
+
+      <!-- 1. Videolyric -->
+      <div class="carrd-glass rounded-2xl border border-border-subtle p-6 sm:p-8 flex flex-col gap-5 reveal" style="--delay:0ms">
+        <div class="flex items-center justify-between text-sm sm:text-base font-mono">
+          <span class="flex items-center gap-2.5 text-primary font-bold text-xl sm:text-2xl">
+            <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>Videolyric
+          </span>
+        </div>
+        <div class="group relative w-full aspect-video rounded-xl bg-bg-primary overflow-hidden border border-border-subtle shadow-xl cursor-pointer reveal"
+             style="--delay:80ms"
+             onclick="playVideo(this, '8B8HgI3myfE')">
+          <img alt="Videolyric Preview" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+               src="https://img.youtube.com/vi/8B8HgI3myfE/maxresdefault.jpg"
+               onerror="this.src='https://img.youtube.com/vi/8B8HgI3myfE/hqdefault.jpg'">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-red-600/90 text-white flex items-center justify-center shadow-[0_0_35px_rgba(220,38,38,0.5)] group-hover:scale-110 group-hover:bg-red-600 transition-all">
+              <svg class="w-8 h-8 sm:w-10 sm:h-10 fill-current translate-x-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Edición Long-Form -->
+      <div class="carrd-glass rounded-2xl border border-border-subtle p-6 sm:p-8 flex flex-col gap-5 reveal" style="--delay:0ms">
+        <div class="text-primary font-bold text-xl sm:text-2xl font-mono">Edición Long-Form</div>
+        <div class="group relative w-full aspect-video rounded-xl bg-bg-primary overflow-hidden border border-border-subtle shadow-xl cursor-pointer reveal"
+             style="--delay:80ms"
+             onclick="playVideo(this, 'TE0RnBoQXao')">
+          <img alt="Edición Long-Form Preview" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+               src="https://img.youtube.com/vi/TE0RnBoQXao/maxresdefault.jpg"
+               onerror="this.src='https://img.youtube.com/vi/TE0RnBoQXao/hqdefault.jpg'">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-red-600/90 text-white flex items-center justify-center shadow-[0_0_35px_rgba(220,38,38,0.5)] group-hover:scale-110 group-hover:bg-red-600 transition-all">
+              <svg class="w-8 h-8 sm:w-10 sm:h-10 fill-current translate-x-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Segunda Edición Long-Form -->
+      <div class="carrd-glass rounded-2xl border border-border-subtle p-6 sm:p-8 flex flex-col gap-5 reveal" style="--delay:0ms">
+        <div class="text-primary font-bold text-xl sm:text-2xl font-mono">Edición Long-Form</div>
+        <div class="group relative w-full aspect-video rounded-xl bg-bg-primary overflow-hidden border border-border-subtle shadow-xl cursor-pointer reveal"
+             style="--delay:80ms"
+             onclick="playVideo(this, 'd-Kc-zveULs')">
+          <img alt="Edición Long-Form Preview" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+               src="https://img.youtube.com/vi/d-Kc-zveULs/maxresdefault.jpg"
+               onerror="this.src='https://img.youtube.com/vi/d-Kc-zveULs/hqdefault.jpg'">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-red-600/90 text-white flex items-center justify-center shadow-[0_0_35px_rgba(220,38,38,0.5)] group-hover:scale-110 group-hover:bg-red-600 transition-all">
+              <svg class="w-8 h-8 sm:w-10 sm:h-10 fill-current translate-x-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Shorts -->
+      <div class="flex flex-col gap-6">
+        <div class="flex items-center justify-between border-b border-border-subtle/50 pb-3 reveal" style="--delay:0ms">
+          <span class="text-primary font-bold text-xl sm:text-2xl">Shorts</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+
+          <!-- Short 1 -->
+          <div class="carrd-glass rounded-2xl border border-border-subtle p-4 flex flex-col gap-3.5 transition-all reveal" style="--delay:0ms">
+            <div class="group relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-bg-primary border border-border-subtle shadow-lg cursor-pointer"
+                 onclick="playVideo(this, '_ubCSgQpD_Q')">
+              <img alt="YouTube Short 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                   src="https://img.youtube.com/vi/_ubCSgQpD_Q/maxresdefault.jpg"
+                   onerror="this.src='https://img.youtube.com/vi/_ubCSgQpD_Q/hqdefault.jpg'">
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-14 h-14 rounded-2xl bg-red-600/90 text-white flex items-center justify-center shadow-[0_0_25px_rgba(220,38,38,0.5)] group-hover:scale-110 group-hover:bg-red-600 transition-all">
+                  <svg class="w-7 h-7 fill-current translate-x-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Short 2 -->
+          <div class="carrd-glass rounded-2xl border border-border-subtle p-4 flex flex-col gap-3.5 transition-all reveal" style="--delay:100ms">
+            <div class="group relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-bg-primary border border-border-subtle shadow-lg cursor-pointer"
+                 onclick="playVideo(this, 'ttef-mVFAvQ')">
+              <img alt="YouTube Short 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                   src="https://img.youtube.com/vi/ttef-mVFAvQ/maxresdefault.jpg"
+                   onerror="this.src='https://img.youtube.com/vi/ttef-mVFAvQ/hqdefault.jpg'">
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-14 h-14 rounded-2xl bg-red-600/90 text-white flex items-center justify-center shadow-[0_0_25px_rgba(220,38,38,0.5)] group-hover:scale-110 group-hover:bg-red-600 transition-all">
+                  <svg class="w-7 h-7 fill-current translate-x-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Short 3 -->
+          <div class="carrd-glass rounded-2xl border border-border-subtle p-4 flex flex-col gap-3.5 transition-all reveal" style="--delay:200ms">
+            <div class="group relative w-full aspect-[9/16] rounded-xl overflow-hidden bg-bg-primary border border-border-subtle shadow-lg cursor-pointer"
+                 onclick="playVideo(this, 'P2W6-fS7g28')">
+              <img alt="YouTube Short 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                   src="https://img.youtube.com/vi/P2W6-fS7g28/maxresdefault.jpg"
+                   onerror="this.src='https://img.youtube.com/vi/P2W6-fS7g28/hqdefault.jpg'">
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-14 h-14 rounded-2xl bg-red-600/90 text-white flex items-center justify-center shadow-[0_0_25px_rgba(220,38,38,0.5)] group-hover:scale-110 group-hover:bg-red-600 transition-all">
+                  <svg class="w-7 h-7 fill-current translate-x-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         CONTACTO
+    ═══════════════════════════════════════════════════ -->
+    <section class="carrd-glass rounded-2xl border border-primary/30 p-8 sm:p-12 relative overflow-hidden reveal"
+             id="contact" style="--delay:0ms">
+      <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-primary-container/20 rounded-full blur-[80px] pointer-events-none"></div>
+
+      <div class="flex flex-col gap-8 relative z-10">
+
+        <h2 class="text-4xl sm:text-5xl font-black text-text-primary tracking-tight reveal" style="--delay:80ms">
+          CONTÁCTAME
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+
+          <!-- Discord -->
+          <div class="p-6 rounded-2xl bg-bg-primary/90 border border-border-subtle
+                      flex flex-col justify-between gap-5 reveal" style="--delay:160ms">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-mono text-text-muted flex items-center gap-2">
+                <svg class="w-4 h-4 fill-[#5865F2] shrink-0" viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.91,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.91,96.12,53,91.08,65.69,84.69,65.69Z"/>
+                </svg>
+                Discord
+              </span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#5865F2]"></span>
+            </div>
+            <div>
+              <span class="text-lg font-bold text-text-primary block font-mono">shiroth_</span>
+              <span class="text-xs text-text-muted">Mensaje directo</span>
+            </div>
+            <button id="copy-discord-btn"
+                    class="w-full py-3 text-sm font-mono rounded-xl bg-bg-card hover:bg-primary/20
+                           text-primary border border-primary/30 flex items-center justify-center gap-2 transition-all"
+                    onclick="navigator.clipboard.writeText('shiroth_');const b=document.getElementById('copy-discord-btn');b.innerText='¡Copiado! ✓';setTimeout(()=>b.innerText='Copiar Discord',2000)">
+              Copiar Discord
+            </button>
+          </div>
+
+          <!-- X / Twitter -->
+          <a class="p-6 rounded-2xl bg-bg-primary/90 border border-border-subtle
+                    flex flex-col justify-between gap-5 transition-all reveal"
+             href="https://x.com/shiroth_vfx" rel="noopener noreferrer" target="_blank" style="--delay:260ms">
+            <span class="text-sm font-mono text-text-muted">X / Twitter</span>
+            <div>
+              <span class="text-lg font-bold text-text-primary block font-mono">@shiroth_vfx</span>
+              <span class="text-xs text-text-muted">Seguir &amp; DM</span>
+            </div>
+            <span class="w-full py-3 text-sm font-mono rounded-xl bg-bg-card hover:bg-primary/20
+                         text-primary border border-primary/30 text-center block">Abrir Perfil 𝕏</span>
+          </a>
+
+          <!-- Email -->
+          <a class="p-6 rounded-2xl bg-bg-primary/90 border border-border-subtle
+                    flex flex-col justify-between gap-5 transition-all reveal"
+             href="mailto:esquibelelias2@gmail.com" style="--delay:360ms">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-mono text-text-muted">Correo Electrónico</span>
+              <span class="material-symbols-outlined text-base text-primary">mail</span>
+            </div>
+            <div>
+              <span class="text-lg font-bold text-text-primary block font-mono truncate"
+                    title="esquibelelias2@gmail.com">esquibelelias2@gmail.com&nbsp;</span>
+            </div>
+            <span class="w-full py-3 text-sm font-mono rounded-xl bg-primary-container text-white
+                         text-center font-medium shadow-[0_0_15px_rgba(17,82,245,0.4)] block hover:bg-blue-600">
+              Redactar Correo
+            </span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SCROLL REVEAL — IntersectionObserver
+       ──────────────────────────────────────────────────────────
+       • Observa cada elemento .reveal
+       • Cuando entra en viewport agrega .in-view (transition CSS)
+       • Respeta el --delay escalonado definido en el HTML
+       • Deja de observar el elemento una vez revelado (eficiencia)
+  ═══════════════════════════════════════════════════════════ -->
+  <script>
+    // Reproductor de video interactivo (Click-to-Play dentro del mismo sitio)
+    function playVideo(container, videoId) {
+      if (!container || !videoId) return;
+
+      // Incrustar el reproductor directamente en la caja para reproducir dentro del sitio
+      container.innerHTML = '<iframe class="w-full h-full border-0 rounded-xl" src="https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&playsinline=1" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+    }
+
+    (function () {
+      'use strict';
+
+      // Mostrar banner informativo solo si se abre directamente por file:///
+      if (window.location.protocol === 'file:') {
+        var notice = document.getElementById('file-protocol-notice');
+        if (notice) notice.classList.remove('hidden');
+      }
+
+      // Obtener todos los elementos animables
+      var elements = document.querySelectorAll('.reveal');
+
+      // Configurar el observer
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target); // Revelar solo una vez
+          }
+        });
+      }, {
+        // El elemento se activa cuando al menos un 10% entra en pantalla
+        threshold: 0.1,
+        // Margen negativo: activa la animación un poco antes del borde inferior
+        rootMargin: '0px 0px -30px 0px'
+      });
+
+      // Observar cada elemento
+      elements.forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+</body>
+</html>
